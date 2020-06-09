@@ -122,7 +122,7 @@ class BART:
         return sum(loss_list) / len(loss_list)
 
     def generate(self, src_text, top_k, top_p):
-        self._model.set_mode('infer')
+        self._model.split_to_gpus(1)
         self._model.eval()
 
         generator = SequenceGenerator(
