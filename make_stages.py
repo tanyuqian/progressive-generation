@@ -88,7 +88,7 @@ def main(rate, dataset='writing_prompts'):
             f'data/{dataset}/extracted_{split}_{rate}words.txt', 'w')
 
         for example in examples:
-            print('CONDITION:{}\nEXTRACTED:\n{}\n\nORIGINAL TEXT:\n{}'.format(
+            print('CONDITION:{}\n\nEXTRACTED:\n{}\n\nORIGINAL TEXT:\n{}'.format(
                 example['condition'],
                 example['extracted_text'], example['original_text']),
                 file=log_file)
