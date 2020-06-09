@@ -25,8 +25,11 @@ class BARTModelWrapper(nn.Module):
         if n_gpus == 2:
             self.encoder.cuda(0)
             self.decoder.cuda(1)
+            self._device_encoder = 'cuda:0'
+            self._device_decoder = 'cuda:1'
         else:
             self.cuda()
+            self._device_encoder = self._device_decoder = 'cuda'
 
         torch.cuda.empty_cache()
         self._n_split_gpus = n_gpus
