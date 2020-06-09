@@ -11,17 +11,19 @@ from transformers import AdamW, get_linear_schedule_with_warmup
 from .gpt2_utils import GPT2LMHeadModelMultiDevicesWrapper, sample_sequence
 
 
-TextDataExample = namedtuple('TextDataExample', ['text', 'tokens', 'prompt'])
+GPT2_MAX_LENGTH = 1024
+
+
+TextDataExample = namedtuple('TextDataExample', ['cond', 'text'])
 
 
 class GPT2:
-    def __init__(self, gpt2_type, max_length, n_gpus):
+    def __init__(self, gpt2_type):
         self._gpt2_type = gpt2_type
-        self._max_length = max_length
-
         self._tokenizer = GPT2Tokenizer.from_pretrained(gpt2_type)
 
         if gpt2_type in ['gpt2-medium', 'gpt2-large']:
+            n_gpus = 2 if gpt2_type == 'gpt2-medium' else 4
             devices = [f'cuda:{i}' for i in range(n_gpus)]
             self._model = GPT2LMHeadModelMultiDevicesWrapper(
                 gpt2_type=gpt2_type, devices=devices)
@@ -44,7 +46,7 @@ class GPT2:
         self._best_dev_loss = float('inf')
 
         os.makedirs(os.path.join(self._log_dir, 'models'), exist_ok=True)
-        os.makedirs(os.path.join(self._log_dir, 'generations'), exist_ok=True)
+        os.makedirs(os.path.join(self._log_dir, 'ckpt_gens'), exist_ok=True)
         self._log_file = open(os.path.join(self._log_dir, 'log.txt'), 'w')
 
     def save_model(self, path):
@@ -71,18 +73,10 @@ class GPT2:
             self._optimizer, num_warmup_steps=warmup_steps,
             num_training_steps=train_steps)
 
-    def load_data(self, split, texts, prompts):
+    def load_data(self, split, conds, texts):
         self._dataset[split] = []
-        for prompt, text in tqdm(zip(prompts, texts),
-                                 desc=f'Loading {split} data',
-                                 total=len(texts)):
-            text = prompt + ' [SEP] ' + text + ' <|endoftext|>'
-
-            tokens = self._tokenizer.encode(
-                text, add_special_tokens=False, max_length=self._max_length)
-
-            self._dataset[split].append(
-                TextDataExample(text=text, tokens=tokens, prompt=prompt))
+        for cond, text in zip(conds, texts):
+            self._dataset[split].append(TextDataExample(cond=cond, text=text))
 
     def train_epoch(self, batch_size):
         assert 'train' in self._dataset
@@ -95,9 +89,13 @@ class GPT2:
 
             self._optimizer.zero_grad()
             for example in batch:
-                inputs = torch.tensor([example.tokens]).to(device='cuda')
+                tokens = self._tokenizer.encode(
+                    example.cond + ' [SEP] ' + example.text + ' <|endoftext|>',
+                    add_special_tokens=False, max_length=GPT2_MAX_LENGTH)
 
-                loss = self._model(inputs, labels=inputs)[0] * (1 / batch_size)
+                inputs = torch.tensor([tokens]).to(device='cuda')
+
+                loss = self._model(inputs, labels=inputs)[0] / batch_size
                 loss.backward()
 
             self._optimizer.step()
@@ -113,7 +111,11 @@ class GPT2:
 
         loss_list = []
         for example in self._dataset['dev']:
-            inputs = torch.tensor([example.tokens]).to(device='cuda')
+            tokens = self._tokenizer.encode(
+                example.cond + ' [SEP] ' + example.text + ' <|endoftext|>',
+                add_special_tokens=False, max_length=GPT2_MAX_LENGTH)
+
+            inputs = torch.tensor([tokens]).to(device='cuda')
 
             with torch.no_grad():
                 loss = self._model(inputs, labels=inputs)[0]
@@ -121,14 +123,14 @@ class GPT2:
 
         return sum(loss_list) / len(loss_list)
 
-    def generate(self, top_k, top_p, prompt):
-        context_tokens = \
-            self._tokenizer.encode(prompt, add_special_tokens=False)
+    def generate(self, top_k, top_p, cond):
+        context_tokens = self._tokenizer.encode(
+            cond + ' [SEP] ', add_special_tokens=False)
 
         out = sample_sequence(
             model=self._model,
             context=context_tokens,
-            length=self._max_length + 1 - len(context_tokens),
+            length=GPT2_MAX_LENGTH + 1 - len(context_tokens),
             top_k=top_k,
             top_p=top_p,
             device='cuda')
@@ -153,14 +155,12 @@ class GPT2:
         self._log_file.flush()
 
         generation_file = open(
-            f'{self._log_dir}/generations/step{self._global_step}.txt', 'w')
-        for i in range(20):
-            prompt = self._dataset['dev'][i].prompt + '[SEP]'
-            truth_text = self._dataset['dev'][i].text
-            gen_text = self.generate(
-                top_k=-1, top_p=0.95, prompt=prompt)
+            f'{self._log_dir}/ckpt_gens/step{self._global_step}.txt', 'w')
+        for example in self._dataset['dev'][:20]:
+            truth_text = example.text
+            gen_text = self.generate(top_k=-1, top_p=0.95, cond=example.cond)
 
-            print(f'PROMPT:\n {prompt}\n\n'
+            print(f'CONDITION:\n {example.cond}\n\n'
                   f'GENERATION:\n{gen_text}\n\n',
                   f'DATA:\n{truth_text}\n',
                   '=' * 100, '\n\n\n', file=generation_file)
