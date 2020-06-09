@@ -13,7 +13,8 @@ def get_texts(dataset):
             f'data/{dataset}/{split}.pickle', 'rb'))
 
         conds[split], texts[split] = [], []
-        for example in tqdm(examples, desc=f'loading {split} set'):
+        for example in examples:
+            print(f'loading {split} set...')
             conds[split].append(example['condition'])
             texts[split].append(example['text'])
 
@@ -63,10 +64,10 @@ def main(rate, dataset='writing_prompts'):
 
     vocab_dict = {word: 1 for word in vocab}
     for split in ['train', 'dev', 'test']:
-        examples = []
-        for prompt, text in zip(conds[split], texts[split]):
-            print(f'extracting {split} set...')
+        print(f'extracting {split} set...')
 
+        examples = []
+        for cond, text in zip(conds[split], texts[split]):
             extracted_paras = []
             for para in text.split('\n'):
                 extracted_paras.append(' '.join([
@@ -75,7 +76,7 @@ def main(rate, dataset='writing_prompts'):
             extracted_text = '\n'.join(extracted_paras)
 
             examples.append({
-                'condition': prompt,
+                'condition': cond,
                 'extracted_text': extracted_text,
                 'original_text': text
             })
@@ -88,7 +89,7 @@ def main(rate, dataset='writing_prompts'):
 
         for example in examples:
             print('CONDITION:{}\nEXTRACTED:\n{}\n\nORIGINAL TEXT:\n{}'.format(
-                example['contition'],
+                example['condition'],
                 example['extracted_text'], example['original_text']),
                 file=log_file)
             print('=' * 100, '\n\n', file=log_file)
