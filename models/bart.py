@@ -170,12 +170,12 @@ class BART:
             generation_file.flush()
 
     def _get_seq2seq_loss(self, src_text, tgt_text):
-        src_tokens = torch.tensor(self._model.encode(src_text)[:BART_MAX_LEN])
-        tgt_tokens = torch.tensor(self._model.encode(tgt_text)[:BART_MAX_LEN])
+        src_tokens = self._model.encode(src_text)[:BART_MAX_LEN]
+        tgt_tokens = self._model.encode(tgt_text)[:BART_MAX_LEN]
 
         logits, extra = self._model(
             src_tokens=src_tokens.unsqueeze(0),
-            src_lengths=[src_tokens.shape[0]],
+            src_lengths=torch.tensor([src_tokens.shape[0]]),
             prev_output_tokens=tgt_tokens.unsqueeze(0))
 
         tgt_tokens = tgt_tokens.to(logits.device)
