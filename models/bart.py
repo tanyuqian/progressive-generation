@@ -157,7 +157,7 @@ class BART:
         self._log_file.flush()
 
         generation_file = open(
-            f'{self._log_dir}/generations/step{self._global_step}.txt', 'w')
+            f'{self._log_dir}/ckpt_gens/step{self._global_step}.txt', 'w')
 
         # for src_text, tgt_text in zip(src_texts[:5], tgt_texts[:5]):
         for example in self._dataset['dev'][:10]:
