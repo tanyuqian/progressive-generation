@@ -23,7 +23,9 @@ class GPT2:
         self._tokenizer = GPT2Tokenizer.from_pretrained(gpt2_type)
 
         if gpt2_type in ['gpt2-medium', 'gpt2-large']:
-            n_gpus = 2 if gpt2_type == 'gpt2-medium' else 4
+            n_gpus = min(torch.cuda.device_count(),
+                         2 if gpt2_type == 'gpt2-medium' else 4)
+
             devices = [f'cuda:{i}' for i in range(n_gpus)]
             self._model = GPT2LMHeadModelMultiDevicesWrapper(
                 gpt2_type=gpt2_type, devices=devices)
