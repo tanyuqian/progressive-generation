@@ -21,7 +21,7 @@ def load_data(dataset, split, vocab_size):
         examples = pickle.load(open(
             f'data/{dataset}/extracted_{split}_{vocab_size}words.pickle', 'rb'))
         return [example['condition'] for example in examples],\
-               [example['text'] for example in examples]
+               [example['extracted_text'] for example in examples]
 
 
 def main(dataset='wp', vocab='full', gpt2_type='gpt2', n_epochs=3):
