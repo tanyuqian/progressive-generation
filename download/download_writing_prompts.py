@@ -12,7 +12,7 @@ def main():
     os.rename('writingPrompts/valid.wp_source', 'writingPrompts/dev.wp_source')
     os.rename('writingPrompts/valid.wp_target', 'writingPrompts/dev.wp_target')
 
-    save_dir = 'data/writing_prompts'
+    save_dir = 'data/wp'
     os.makedirs(save_dir, exist_ok=True)
 
     tokenizer = GPT2Tokenizer.from_pretrained('gpt2-large')

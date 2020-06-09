@@ -1,7 +1,6 @@
 import pickle
 import fire
 import numpy as np
-from tqdm import tqdm
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 
@@ -56,7 +55,9 @@ def get_vocab(texts, rate):
     return result_list, analyzer
 
 
-def main(rate, dataset='writing_prompts'):
+def main(rate, dataset='wp'):
+    assert dataset in ['cnn', 'wp']
+
     conds, texts = get_texts(dataset)
 
     vocab, analyzer = get_vocab(texts['train'], rate=rate)

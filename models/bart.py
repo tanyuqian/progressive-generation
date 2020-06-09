@@ -112,7 +112,7 @@ class BART:
         self._model.eval()
 
         loss_list = []
-        for example in self._dataset['dev']:
+        for example in tqdm(self._dataset['dev'], desc='Evaluating'):
             with torch.no_grad():
                 loss = self._get_seq2seq_loss(
                     src_text=example.src_text, tgt_text=example.tgt_text)

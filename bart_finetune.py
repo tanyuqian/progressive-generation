@@ -34,7 +34,7 @@ def load_data(dataset, split, vocab, keep_condition):
             return [example['extracted_text'] for example in examples]
 
 
-def main(dataset='writing_prompts',
+def main(dataset='wp',
          src_vocab='null',
          tgt_vocab='full',
          n_epochs=3):
