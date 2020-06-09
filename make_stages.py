@@ -9,12 +9,12 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 def get_texts(dataset):
     conds, texts = {}, {}
     for split in ['train', 'dev', 'test']:
+        print(f'loading {split} set...')
         examples = pickle.load(open(
             f'data/{dataset}/{split}.pickle', 'rb'))
 
         conds[split], texts[split] = [], []
         for example in examples:
-            print(f'loading {split} set...')
             conds[split].append(example['condition'])
             texts[split].append(example['text'])
 
