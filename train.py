@@ -6,7 +6,7 @@ def main(dataset, prog_steps, first_model):
     prog_vocabs = prog_steps.split('-')
     assert prog_vocabs[0] == 'null' and prog_vocabs[-1] == 'full'
 
-    for vocab in prog_steps[1:-1]:
+    for vocab in prog_vocabs[1:-1]:
         os.system(f'python make_stage.py '
                   f'--dataset {dataset} '
                   f'--rate {vocab}')
