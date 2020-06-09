@@ -24,14 +24,14 @@ def load_data(dataset, split, vocab_size):
                [example['text'] for example in examples]
 
 
-def main(dataset='wp', vocab_size='full', gpt2_type='gpt2', n_epochs=3):
-    if os.path.exists(f'{gpt2_type}_{dataset}_{vocab_size}words_training_logs'):
+def main(dataset='wp', vocab='full', gpt2_type='gpt2', n_epochs=3):
+    if os.path.exists(f'{gpt2_type}_{dataset}_{vocab}words_training_logs'):
         return
 
     gpt2 = GPT2(gpt2_type=gpt2_type)
 
     for split in ['train', 'dev']:
-        conds, texts = load_data(dataset, split, vocab_size)
+        conds, texts = load_data(dataset, split, vocab)
         gpt2.load_data(split=split, conds=conds, texts=texts)
 
     train_steps = n_epochs * (len(gpt2.train_dataset) // BATCH_SIZE + 1)
@@ -45,7 +45,7 @@ def main(dataset='wp', vocab_size='full', gpt2_type='gpt2', n_epochs=3):
 
     gpt2.creat_log_dir(
         eval_steps=len(gpt2.train_dataset) // BATCH_SIZE,
-        label=f'{gpt2_type}_{dataset}_{vocab_size}words')
+        label=f'{gpt2_type}_{dataset}_{vocab}words')
 
     for epoch in range(n_epochs):
         gpt2.train_epoch(batch_size=BATCH_SIZE)
