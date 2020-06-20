@@ -34,7 +34,7 @@ class BART:
         self._best_dev_loss = None
 
     def create_training_log(self, eval_steps, label):
-        self._log_dir = f'{label}_training_logs'
+        self._log_dir = f'training_logs/{label}'
         self._eval_steps = eval_steps
         self._best_dev_loss = float('inf')
 
