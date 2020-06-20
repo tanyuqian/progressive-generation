@@ -43,11 +43,10 @@ class GPT2:
         self._best_dev_loss = None
 
     def creat_log_dir(self, eval_steps, label):
-        self._log_dir = f'{label}_training_logs'
+        self._log_dir = f'training_logs/{label}'
         self._eval_steps = eval_steps
         self._best_dev_loss = float('inf')
 
-        os.makedirs(os.path.join(self._log_dir, 'models'), exist_ok=True)
         os.makedirs(os.path.join(self._log_dir, 'ckpt_gens'), exist_ok=True)
         self._log_file = open(os.path.join(self._log_dir, 'log.txt'), 'w')
 
@@ -125,7 +124,7 @@ class GPT2:
 
         return sum(loss_list) / len(loss_list)
 
-    def generate(self, top_k, top_p, cond):
+    def generate(self, cond, top_k, top_p):
         context_tokens = self._tokenizer.encode(
             cond + ' [SEP] ', add_special_tokens=False)
 
@@ -151,7 +150,7 @@ class GPT2:
 
         if eval_loss < self._best_dev_loss:
             self._best_dev_loss = eval_loss
-            self.save_model(f'{self._log_dir}/models/best_model.pt')
+            self.save_model(f'{self._log_dir}/best_model.pt')
             print('Best Model Updated.', file=self._log_file)
 
         self._log_file.flush()
@@ -160,7 +159,7 @@ class GPT2:
             f'{self._log_dir}/ckpt_gens/step{self._global_step}.txt', 'w')
         for example in self._dataset['dev'][:20]:
             truth_text = example.text
-            gen_text = self.generate(top_k=-1, top_p=0.95, cond=example.cond)
+            gen_text = self.generate(cond=example.cond, top_k=-1, top_p=0.95)
 
             print(f'CONDITION:\n {example.cond}\n\n'
                   f'GENERATION:\n{gen_text}\n\n',

@@ -28,7 +28,6 @@ class BART:
         self._global_step = 0
 
         self._dataset = {}
-
         self._log_dir = None
         self._eval_steps = None
         self._log_file = None
@@ -39,7 +38,6 @@ class BART:
         self._eval_steps = eval_steps
         self._best_dev_loss = float('inf')
 
-        os.makedirs(os.path.join(self._log_dir, 'models'), exist_ok=True)
         os.makedirs(os.path.join(self._log_dir, 'ckpt_gens'), exist_ok=True)
         self._log_file = open(os.path.join(self._log_dir, 'log.txt'), 'w')
 
@@ -64,17 +62,14 @@ class BART:
         print(f'Model saved in {path}.')
 
     def load_model(self, path):
-        self._model.load_state_dict(
-            torch.load(path, map_location='cuda'))
+        self._model.load_state_dict(torch.load(path, map_location='cuda'))
         print(f'Model {path} loaded.')
 
     def load_data(self, set_type, src_texts, tgt_texts):
         assert len(src_texts) == len(tgt_texts)
 
         self._dataset[set_type] = []
-        for src_text, tgt_text in tqdm(zip(src_texts, tgt_texts),
-                                       total=len(src_texts),
-                                       desc=f'loading {set_type} data'):
+        for src_text, tgt_text in zip(src_texts, tgt_texts):
             self._dataset[set_type].append(TextPairData(
                 src_text=src_text, tgt_text=tgt_text))
 
@@ -151,7 +146,7 @@ class BART:
 
         if eval_loss < self._best_dev_loss:
             self._best_dev_loss = eval_loss
-            self.save_model(f'{self._log_dir}/models/best_model.pt')
+            self.save_model(f'{self._log_dir}/best_model.pt')
             print('Best Model Updated.', file=self._log_file)
 
         self._log_file.flush()
@@ -159,7 +154,6 @@ class BART:
         generation_file = open(
             f'{self._log_dir}/ckpt_gens/step{self._global_step}.txt', 'w')
 
-        # for src_text, tgt_text in zip(src_texts[:5], tgt_texts[:5]):
         for example in self._dataset['dev'][:10]:
             gen_text = self.generate(example.src_text, top_k=-1., top_p=0.95)
 
