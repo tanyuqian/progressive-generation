@@ -40,6 +40,7 @@ def main(dataset='wp',
          n_epochs=3):
 
     if os.path.exists(f'training_logs/bart_{dataset}_{src_vocab}-{tgt_vocab}'):
+        print('Training path existed! Remove it if wanna re-train.')
         return
 
     bart = BART()
