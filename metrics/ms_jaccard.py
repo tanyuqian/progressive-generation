@@ -51,6 +51,6 @@ def get_ngram_cnt(texts, gram_n):
 
 def get_cnt_sents(texts):
     cnt_all_sent = 0
-    for text in tqdm(texts, desc='get_sents'):
+    for text in texts:
         cnt_all_sent += len(nltk.sent_tokenize(text))
     return cnt_all_sent
