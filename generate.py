@@ -12,13 +12,12 @@ def get_model_list(dataset, prog_vocabs, first_model):
     for i in range(len(prog_vocabs) - 1):
         if i == 0 and 'gpt2' in first_model:
             model = GPT2(gpt2_type=first_model)
-            model.load_model(f'{first_model}_{dataset}_{prog_vocabs[1]}words'
-                             f'_training_logs/models/best_model.pt')
+            model.load_model(f'training_logs/{first_model}_{dataset}_'
+                             f'{prog_vocabs[1]}words/best_model.pt')
         else:
             model = BART()
-            model.load_model(
-                f'bart_{dataset}_{prog_vocabs[i]}-{prog_vocabs[i+1]}'
-                f'_training_logs/models/best_model.pt')
+            model.load_model(f'training_logs/bart_{dataset}_{prog_vocabs[i]}-'
+                             f'{prog_vocabs[i+1]}/best_model.pt')
 
         model_list.append(model)
 

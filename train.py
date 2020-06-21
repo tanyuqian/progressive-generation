@@ -22,7 +22,7 @@ def main(dataset, prog_steps, first_model):
                   f'--vocab {prog_vocabs[1]} '
                   f'--gpt2_type {first_model}')
 
-    for i in range(1, len(prog_steps) - 1):
+    for i in range(1, len(prog_vocabs) - 1):
         os.system(f'python bart_finetune.py --dataset {dataset} '
                   f'--src_vocab {prog_vocabs[i]} '
                   f'--tgt_vocab {prog_vocabs[i + 1]}')
