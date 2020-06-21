@@ -25,7 +25,7 @@ def load_data(dataset, split, vocab_size):
 
 
 def main(dataset='wp', vocab='full', gpt2_type='gpt2', n_epochs=3):
-    if os.path.exists(f'{gpt2_type}_{dataset}_{vocab}words_training_logs'):
+    if os.path.exists(f'training_logs/{gpt2_type}_{dataset}_{vocab}words'):
         return
 
     gpt2 = GPT2(gpt2_type=gpt2_type)

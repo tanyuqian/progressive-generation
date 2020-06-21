@@ -39,7 +39,7 @@ def main(dataset='wp',
          tgt_vocab='full',
          n_epochs=3):
 
-    if os.path.exists(f'bart_{dataset}_{src_vocab}-{tgt_vocab}_training_logs'):
+    if os.path.exists(f'training_logs/bart_{dataset}_{src_vocab}-{tgt_vocab}'):
         return
 
     bart = BART()
