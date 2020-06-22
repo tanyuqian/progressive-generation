@@ -116,7 +116,7 @@ class BART:
 
         return sum(loss_list) / len(loss_list)
 
-    def generate(self, src_text, top_k, top_p):
+    def generate(self, cond, top_k, top_p):
         self._model.split_to_gpus(1)
         self._model.eval()
 
@@ -127,7 +127,7 @@ class BART:
             sampling_topk=top_k,
             sampling_topp=top_p)
 
-        src_tokens = self._model.encode(src_text)[:BART_MAX_LEN]
+        src_tokens = self._model.encode(cond)[:BART_MAX_LEN]
 
         outputs = generator.generate(
             models=[self._model.model],

@@ -24,6 +24,13 @@ def get_model_list(dataset, prog_vocabs, first_model):
     return model_list
 
 
+def generate(model, cond, top_k, top_p):
+    while True:
+        gen_text = model.generate(cond=cond, top_k=top_k, top_p=top_p)
+        if len(list(filter(str.isalpha, gen_text))) > 0:
+            return gen_text
+
+
 def main(dataset,
          prog_steps,
          first_model,
@@ -52,16 +59,13 @@ def main(dataset,
     for example in tqdm(test_examples, desc='Generating'):
         condition, truth = example['condition'], example['text']
 
-        if 'gpt2' in first_model:
-            prog_gens = [model_list[0].generate(
-                cond=condition, top_k=top_k, top_p=top_p)]
-        else:
-            prog_gens = [model_list[0].generate(
-                src_text=condition, top_k=top_k, top_p=top_p)]
+        prog_gens = [generate(
+            model=model_list[0], cond=condition, top_k=top_k, top_p=top_p)]
 
         for model in model_list[1:]:
-            prog_gens.append(model.generate(
-                src_text=condition + ' [SEP] ' + prog_gens[-1],
+            prog_gens.append(generate(
+                model=model,
+                cond=condition + ' [SEP] ' + prog_gens[-1],
                 top_k=top_k, top_p=top_p))
 
         gens.append({
