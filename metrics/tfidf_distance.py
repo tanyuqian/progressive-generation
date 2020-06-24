@@ -36,6 +36,9 @@ def evaluate_tfidf_distance(ref_texts, hypo_texts):
 
     ref_feature = get_feature(ref_texts, vocab)
     hypo_feature = get_feature(hypo_texts, vocab)
-    results[f'tfidf_distance'] = np.linalg.norm(ref_feature - hypo_feature)
+    # results[f'tfidf_distance'] = np.linalg.norm(ref_feature - hypo_feature)
+    results[f'tfidf_distance'] = np.dot(ref_feature, hypo_feature) / \
+                                 np.linalg.norm(ref_feature) / \
+                                 np.linalg.norm(hypo_feature)
 
     return results
