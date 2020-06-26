@@ -22,6 +22,8 @@ python train.py \
     --prog_steps null-{...}-full \
     --first_model [bart/gpt2/gpt2-large]
 ```
+* ```--first_model``` specifies the type of first-stage model.
+
 The training log will be stored in ```training_logs/{your setting}/```:
 * ```training_logs/{setting}/log.txt```: evaluation loss of each checkpoint.
 * ```training_logs/{setting}/ckpt_gens/step{}.txt```: ~10 generation examples on dev set of each checkpoint.
