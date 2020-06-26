@@ -32,7 +32,7 @@ Check [scripts/train_all.sh](scripts/train_all.sh) for all commands for training
 
 ## Generate
 ```bash
-python evaluate.py \
+python generate.py \
     --dataset [cnn/wp] \
     --prog_steps null-{...}-full \
     --first_model [bart/gpt2/gpt2-large]
@@ -45,7 +45,7 @@ Check [scripts/gen_all.sh](scripts/gen_all.sh) for all commands for generation.
 
 ## Evaluate
 ```bash
-python generate.py \
+python evaluate.py \
     --dataset [cnn/wp] \
     --prog_steps null-{...}-full \
     --first_model [bart/gpt2/gpt2-large]
