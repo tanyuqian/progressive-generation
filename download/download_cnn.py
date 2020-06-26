@@ -125,7 +125,7 @@ def main():
     split_size = {
         'train': 10000,
         'dev': 5000,
-        'test': 5000
+        'test': 1000
     }
 
     train_texts = []

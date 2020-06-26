@@ -1,4 +1,3 @@
-from tqdm import tqdm
 import nltk
 from scipy.stats.mstats import gmean
 

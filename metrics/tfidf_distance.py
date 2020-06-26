@@ -18,7 +18,7 @@ def get_feature(texts, vocab):
     for i in range(features.shape[0]):
         n_sent = len(nltk.sent_tokenize(texts[i]))
         for idx, data in zip(features[i].indices, features[i].data):
-            # normalizing with #sents
+            # take n_sentences into consideration
             avg_feature[idx] += data / n_sent
 
     return avg_feature / features.shape[0]
@@ -36,9 +36,6 @@ def evaluate_tfidf_distance(ref_texts, hypo_texts):
 
     ref_feature = get_feature(ref_texts, vocab)
     hypo_feature = get_feature(hypo_texts, vocab)
-    # results[f'tfidf_distance'] = np.linalg.norm(ref_feature - hypo_feature)
-    results[f'tfidf_distance'] = np.dot(ref_feature, hypo_feature) / \
-                                 np.linalg.norm(ref_feature) / \
-                                 np.linalg.norm(hypo_feature)
+    results[f'tfidf_distance'] = np.linalg.norm(ref_feature - hypo_feature)
 
     return results

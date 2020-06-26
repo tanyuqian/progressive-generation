@@ -27,12 +27,11 @@ def eval_all_metrics(ref_texts, hypo_texts, label):
     pickle.dump(fbd_results, open(
         f'eval_logs/frechet_bert_distance/{label}.pickle', 'wb'))
 
-    # slow to run, uncomment it when necessary
-    # os.makedirs('eval_logs/forward_backward_bleu', exist_ok=True)
-    # bleu_results = evaluate_forward_backward_bleu(
-    #     hypo_texts=hypo_texts, ref_texts=ref_texts)
-    # pickle.dump(bleu_results, open(
-    #     f'eval_logs/forward_backward_bleu/{label}.pickle', 'wb'))
+    os.makedirs('eval_logs/forward_backward_bleu', exist_ok=True)
+    bleu_results = evaluate_forward_backward_bleu(
+        hypo_texts=hypo_texts, ref_texts=ref_texts)
+    pickle.dump(bleu_results, open(
+        f'eval_logs/forward_backward_bleu/{label}.pickle', 'wb'))
 
 
 def main(dataset,
