@@ -29,7 +29,7 @@ The training log will be stored in ```training_logs/{your setting}/```:
 
 ### Generate
 ```bash
-python generate.py \
+python evaluate.py \
     --dataset [cnn/wp] \
     --prog_steps null-0.2-0.25-full \
     --first_model [bart/gpt2/gpt2-large]

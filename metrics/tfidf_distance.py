@@ -18,7 +18,7 @@ def get_feature(texts, vocab):
     for i in range(features.shape[0]):
         n_sent = len(nltk.sent_tokenize(texts[i]))
         for idx, data in zip(features[i].indices, features[i].data):
-            # take n_sentences into consideration
+            # take n_sentences into feature building
             avg_feature[idx] += data / n_sent
 
     return avg_feature / features.shape[0]
