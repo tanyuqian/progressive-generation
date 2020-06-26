@@ -14,8 +14,7 @@ python download/download_cnn.py
 python download/download_writing_prompts.py
 ```
 
-## Code
-### Train
+## Train
 ```bash
 python train.py \
     --dataset [cnn/wp] \
@@ -31,7 +30,7 @@ The training log will be stored in ```training_logs/{your setting}/```:
 
 Check [scripts/train_all.sh](scripts/train_all.sh) for all commands for training.
 
-### Generate
+## Generate
 ```bash
 python evaluate.py \
     --dataset [cnn/wp] \
@@ -44,7 +43,7 @@ Generated texts will be stored in ```generated_texts/{your setting}/```:
 
 Check [scripts/gen_all.sh](scripts/gen_all.sh) for all commands for generation.
 
-### Evaluate
+## Evaluate
 ```bash
 python generate.py \
     --dataset [cnn/wp] \
@@ -54,7 +53,7 @@ python generate.py \
 
 Check [scripts/eval_all.sh](scripts/eval_all.sh) for all commands for evaluation.
 
-### Present Results
+## Present Results
 ```bash
 python present_eval_results.py \
     --dataset [cnn/wp] \
