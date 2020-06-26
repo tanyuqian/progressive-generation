@@ -64,7 +64,7 @@ Check [scripts/present_all.sh](scripts/present_all.sh) for all commands for pres
 
 ## Results
 For the simplicity to run our code, we reduce the test set to 
-1K examples (numbers in our paper is from 5K examples). 
+1K examples (numbers in our paper are from 5K examples). 
 If you want to change it back to 5K, see ```download/download_cnn.py::Line128``` 
 and ```download/download_writing_prompts.py::Line23```.
 
