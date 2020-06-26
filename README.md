@@ -54,7 +54,7 @@ python generate.py \
 
 Check [scripts/eval_all.sh](scripts/eval_all.sh) for all commands for evaluation.
 
-### Show Results
+### Present Results
 ```bash
 python present_eval_results.py \
     --dataset [cnn/wp] \
