@@ -19,7 +19,7 @@ python download/download_writing_prompts.py
 ```bash
 python train.py \
     --dataset [cnn/wp] \
-    --prog_steps null-0.2-0.25-full \
+    --prog_steps null-{...}-full \
     --first_model [bart/gpt2/gpt2-large]
 ```
 The training log will be stored in ```training_logs/{your setting}/```:
@@ -33,7 +33,7 @@ Check [scripts/train_all.sh](scripts/train_all.sh) for all commands for training
 ```bash
 python evaluate.py \
     --dataset [cnn/wp] \
-    --prog_steps null-0.2-0.25-full \
+    --prog_steps null-{...}-full \
     --first_model [bart/gpt2/gpt2-large]
 ```
 Generated texts will be stored in ```generated_texts/{your setting}/```:
@@ -46,7 +46,7 @@ Check [scripts/gen_all.sh](scripts/gen_all.sh) for all commands for generation.
 ```bash
 python generate.py \
     --dataset [cnn/wp] \
-    --prog_steps null-0.2-0.25-full \
+    --prog_steps null-{...}-full \
     --first_model [bart/gpt2/gpt2-large]
 ```
 
