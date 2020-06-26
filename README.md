@@ -65,8 +65,8 @@ Check [scripts/present_all.sh](scripts/present_all.sh) for all commands for pres
 ## Results
 For the simplicity to run our code, we reduce the test set to 
 1K examples (numbers in our paper are from 5K examples). 
-If you want to change it back to 5K, see [download/download_cnn.py::Line128](download/download_cnn.py) 
-and [download/download_writing_prompts.py::Line23](download/download_writing_prompts.py).
+If you want to change it back to 5K, see [download/download_cnn.py](download/download_cnn.py#L128) 
+and [download/download_writing_prompts.py](download/download_writing_prompts.py#L23).
 
 Results of 1K examples are as below. 
 The superiority of our progressive models is already significant.
