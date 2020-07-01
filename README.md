@@ -1,6 +1,18 @@
 # Progressive Generation
 
-Code to be cleaned up soon...
+*Code to be further cleaned up soon...*
+
+This repo contains preliminary code of the following paper:
+
+[Progressive Generation of Long Text](https://arxiv.org/abs/2006.15720)  
+Bowen Tan, Zichao Yang, Maruan AI-Shedivat, Eric P. Xing, Zhiting Hu  
+pre-print, 2020
+
+The current code includes implementation of:
+- the progressive generation model
+- extensive evaluation metrics:
+  * Frechet Bert Distance ([Montahaei et al.](https://arxiv.org/abs/1904.03971))
+  * 
 
 ## Requirements
 ```
